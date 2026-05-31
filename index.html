@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrea Salgueirinho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:      #1a1814;
+      --muted:    #6b6560;
+      --faint:    #e8e4de;
+      --warm:     #f5f1eb;
+      --accent:   #8b6f4e;
+      --line:     rgba(26,24,20,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--warm);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HERO BG ── */
+    .hero-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero-bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(100%) contrast(200%) invert(100%);
+      mix-blend-mode: multiply;
+      opacity: 0.35;
+    }
+
+        /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem 6rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      background: transparent;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(244, 239, 230, 0.72);
+      z-index: 0;
+    }
+
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 4rem;
+      background: linear-gradient(to bottom, var(--line), transparent);
+    }
+
+
+    .hero-name {
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--ink);
+      letter-spacing: 0.04em;
+      line-height: 1.9;
+      margin-bottom: 2.8rem;
+      opacity: 0.75;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+      transition: opacity 0.2s;
+    }
+    .hero-cta:hover { opacity: 0.6; }
+
+    /* ── PATHS ── */
+    .paths {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 6rem 2rem 8rem;
+      position: relative;
+      z-index: 1;
+      background: var(--warm);
+    }
+
+    .paths-intro {
+      text-align: center;
+      margin-bottom: 3.6rem;
+    }
+
+    .paths-intro p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 300;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .path-item {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .path-item:last-child { border-bottom: 1px solid var(--line); }
+
+    .path-trigger {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      user-select: none;
+    }
+
+    .path-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .path-question {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--ink);
+      flex: 1;
+    }
+
+    .path-arrow {
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+
+    .path-item.open .path-arrow { transform: rotate(90deg); }
+
+    .path-body {
+      display: none;
+      padding-top: 1.4rem;
+      padding-left: calc(0.78rem + 1rem + 0.5rem);
+    }
+    .path-item.open .path-body { display: block; }
+
+    .path-desc {
+      font-size: 0.92rem;
+      color: var(--ink);
+      opacity: 0.7;
+      line-height: 1.8;
+      margin-bottom: 1.6rem;
+    }
+
+    .path-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .path-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+    .path-link:hover { color: var(--accent); }
+
+    .path-link-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .path-link-text {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1px;
+    }
+
+    .path-link-primary .path-link-text {
+      font-weight: 400;
+      border-color: var(--accent);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 1px;
+      height: 5rem;
+      background: var(--line);
+      margin: 0 auto;
+    }
+
+    /* ── TERRITORIES ── */
+    .territories {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem 8rem;
+    }
+
+    .territory {
+      margin-bottom: 5rem;
+    }
+
+    .territory-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .territory-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+    }
+
+    .territory-title em { font-style: italic; }
+
+    .territory-desc {
+      font-size: 0.95rem;
+      color: var(--ink);
+      opacity: 0.7;
+      line-height: 1.85;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .territory-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .t-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.86rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--line);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .t-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    .t-link-type {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      width: 96px;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > * {
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero > *:nth-child(5) { animation-delay: 0.5s; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .path-question { font-size: 1.1rem; }
+      .territory-title { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-bg" aria-hidden="true">
+    <img src="atlas-coragem.png" alt="">
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-name">Andrea Salgueirinho</p>
+    <h1 class="hero-title">Pesquiso <em>in loco.</em></h1>
+    <p class="hero-sub">
+      Vivo o que investigo.<br>
+      Oito anos, 62 países, 4 continentes.<br>
+      O mapa foi feito de dentro.
+    </p>
+    <a href="#entrada" class="hero-cta">por onde você chega</a>
+  </section>
+
+  <!-- PATHS -->
+  <section class="paths" id="entrada">
+
+    <div class="paths-intro">
+      <p>Cada caminho leva a um lugar diferente.<br>Escolha o que ressoa agora.</p>
+    </div>
+
+    <!-- Caminho 1 -->
+    <div class="path-item" onclick="toggle(this)">
+      <div class="path-trigger">
+        <span class="path-num">01</span>
+        <span class="path-question">Estou atravessando uma transição e não sei bem onde estou</span>
+        <span class="path-arrow">›</span>
+      </div>
+      <div class="path-body">
+        <p class="path-desc">
+          Algo mudou, ou está mudando, e o chão parece incerto. Talvez seja uma decisão que não vem, uma sensação de travamento, ou a clareza que some exatamente quando mais é necessária. O Mapa da Coragem é o primeiro passo: um instrumento diagnóstico que ajuda a identificar em que camada você está.
+        </p>
+        <div class="path-links">
+          <a href="https://coragemlab.github.io/Mapa/" class="path-link path-link-primary">
+            <span class="path-link-label">Instrumento</span>
+            <span class="path-link-text">Fazer o Mapa da Coragem →</span>
+          </a>
+          <a href="https://coragemlab.substack.com" class="path-link">
+            <span class="path-link-label">Investigação</span>
+            <span class="path-link-text">Coragem Lab — pesquisa aplicada →</span>
+          </a>
+          <a href="https://wa.me/34687480445?text=Olá%2C%20quero%20saber%20mais%20sobre%20o%20Acompanhamento%20Integrativo%20Individual" class="path-link">
+            <span class="path-link-label">Prática</span>
+            <span class="path-link-text">Acompanhamento Integrativo Individual →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caminho 2 -->
+    <div class="path-item" onclick="toggle(this)">
+      <div class="path-trigger">
+        <span class="path-num">02</span>
+        <span class="path-question">Vivo com muita intensidade, muitos interesses, muita coisa ao mesmo tempo</span>
+        <span class="path-arrow">›</span>
+      </div>
+      <div class="path-body">
+        <p class="path-desc">
+          Aprender em espiral, sentir com profundidade, ter dez projetos em paralelo e ainda assim não conseguir parar: esse território tem nome. A Cartografia da Intensidade foi escrita por quem vive o que investiga. O laudo veio depois. O território sempre existiu.
+        </p>
+        <div class="path-links">
+          <a href="https://cartografiaintensidade.substack.com" class="path-link path-link-primary">
+            <span class="path-link-label">Newsletter</span>
+            <span class="path-link-text">Cartografia da Intensidade →</span>
+          </a>
+          <a href="https://coragemlab.github.io/Coragem-Lab/" class="path-link">
+            <span class="path-link-label">Cadernos</span>
+            <span class="path-link-text">Escrita, atenção e corpo: os três pilares do Método Integrativo →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caminho 3 -->
+    <div class="path-item" onclick="toggle(this)">
+      <div class="path-trigger">
+        <span class="path-num">03</span>
+        <span class="path-question">Já te conheço e quero entender o ecossistema completo</span>
+        <span class="path-arrow">›</span>
+      </div>
+      <div class="path-body">
+        <p class="path-desc">
+          Tudo o que existe aqui faz parte de um sistema coerente. Dois territórios, um método, vários pontos de entrada. Abaixo, o mapa completo organizado por função.
+        </p>
+        <div class="path-links">
+          <a href="https://ensaioscoragem.substack.com" class="path-link">
+            <span class="path-link-label">Ensaios</span>
+            <span class="path-link-text">Ensaios sobre a Coragem — viagem e escrita literária →</span>
+          </a>
+          <a href="https://coragemlab.substack.com" class="path-link">
+            <span class="path-link-label">Pesquisa</span>
+            <span class="path-link-text">Coragem Lab — neurociência, coragem, neurodivergência →</span>
+          </a>
+          <a href="https://cartografiaintensidade.substack.com" class="path-link">
+            <span class="path-link-label">Intensidade</span>
+            <span class="path-link-text">Cartografia da Intensidade — AHSD, espiral, nomeação →</span>
+          </a>
+          <a href="https://coragemlab.github.io/Mapa/" class="path-link">
+            <span class="path-link-label">Instrumento</span>
+            <span class="path-link-text">Mapa da Coragem →</span>
+          </a>
+          <a href="https://coragemlab.github.io/Coragem-Lab/" class="path-link">
+            <span class="path-link-label">Cadernos</span>
+            <span class="path-link-text">Escrita, atenção e corpo: os três pilares →</span>
+          </a>
+          <a href="https://wa.me/34687480445?text=Olá%2C%20quero%20saber%20mais%20sobre%20o%20Acompanhamento%20Integrativo%20Individual" class="path-link">
+            <span class="path-link-label">Método</span>
+            <span class="path-link-text">Acompanhamento Integrativo Individual →</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TERRITORIES (visão geral) -->
+  <section class="territories" id="territories">
+
+    <div class="territory">
+      <p class="territory-tag">Território I · coragem · travessia · método</p>
+      <h2 class="territory-title">Cartografia <em>da Coragem</em></h2>
+      <p class="territory-desc">
+        Uma investigação sobre o que acontece quando uma mulher atravessa transição e incerteza. Pesquisa aplicada, escrita e acompanhamento integrativo.
+      </p>
+      <div class="territory-links">
+        <a href="https://ensaioscoragem.substack.com" class="t-link">
+          <span class="t-link-type">Publicação</span>
+          Ensaios sobre a Coragem
+        </a>
+        <a href="https://coragemlab.substack.com" class="t-link">
+          <span class="t-link-type">Investigação</span>
+          Coragem Lab
+        </a>
+        <a href="https://coragemlab.github.io/Mapa/" class="t-link">
+          <span class="t-link-type">Instrumento</span>
+          Mapa da Coragem
+        </a>
+        <a href="https://coragemlab.github.io/Coragem-Lab/" class="t-link">
+          <span class="t-link-type">Cadernos</span>
+          Escrita, atenção e corpo: os três pilares do Método Integrativo
+        </a>
+        <a href="https://wa.me/34687480445?text=Olá%2C%20quero%20saber%20mais%20sobre%20o%20Acompanhamento%20Integrativo%20Individual" class="t-link">
+          <span class="t-link-type">Prática</span>
+          Acompanhamento Integrativo Individual
+        </a>
+      </div>
+    </div>
+
+    <div class="territory">
+      <p class="territory-tag">Território II · intensidade · ahsd · nomeação</p>
+      <h2 class="territory-title">Cartografia <em>da Intensidade</em></h2>
+      <p class="territory-desc">
+        Para quem vive com muitos interesses simultâneos, aprende em espiral, sente com intensidade. Escrita por quem vive o que investiga. O território sempre existiu. O laudo veio depois.
+      </p>
+      <div class="territory-links">
+        <a href="https://cartografiaintensidade.substack.com" class="t-link">
+          <span class="t-link-type">Newsletter</span>
+          Cartografia da Intensidade
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 · Escola da Coragem · <a href="mailto:aescoladacoragem@gmail.com">aescoladacoragem@gmail.com</a></p>
+  </footer>
+
+  <script>
+    function toggle(el) {
+      const isOpen = el.classList.contains('open');
+      document.querySelectorAll('.path-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) el.classList.add('open');
+    }
+  </script>
+
+</body>
+</html>
